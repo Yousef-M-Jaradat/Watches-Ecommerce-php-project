@@ -1,0 +1,537 @@
+<?php
+include('connection.php');
+$customerid = 2;
+
+$query_select_orders = "SELECT * FROM `order` WHERE customerid = :id";
+$stmt_select_orders = $pdo->prepare($query_select_orders);
+$stmt_select_orders->bindParam(':id', $customerid, PDO::PARAM_INT);
+$stmt_select_orders->execute();
+$orders = $stmt_select_orders->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> Profile</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="./node_modules/ionicons/dist/css/ionicons.min.css">
+    <link rel="stylesheet" href="./node_modules/icon-kit/dist/css/iconkit.min.css">
+    <link rel="stylesheet" href="./node_modules/perfect-scrollbar/css/perfect-scrollbar.css">
+    <link rel="stylesheet" href="./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="./dist/css/theme.min.css">
+    <script src="./src/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <header class="header-top" header-theme="light">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between">
+                    <div class="top-menu d-flex align-items-center">
+                        <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
+                        <div class="header-search">
+                            <div class="input-group">
+                                <span class="input-group-addon search-close"><i class="ik ik-x"></i></span>
+                                <input type="text" class="form-control">
+                                <span class="input-group-addon search-btn"><i class="ik ik-search"></i></span>
+                            </div>
+                        </div>
+                        <button type="button" id="navbar-fullscreen" class="nav-link"><i
+                                class="ik ik-maximize"></i></button>
+                    </div>
+                    <div class="top-menu d-flex align-items-center">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="notiDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                    class="ik ik-bell"></i><span class="badge bg-danger">3</span></a>
+                            <div class="dropdown-menu dropdown-menu-right notification-dropdown"
+                                aria-labelledby="notiDropdown">
+                                <h4 class="header">Notifications</h4>
+                                <div class="notifications-wrap">
+                                    <a href="#" class="media">
+                                        <span class="d-flex">
+                                            <i class="ik ik-check"></i>
+                                        </span>
+                                        <span class="media-body">
+                                            <span class="heading-font-family media-heading">Invitation accepted</span>
+                                            <span class="media-content">Your have been Invited ...</span>
+                                        </span>
+                                    </a>
+                                    <a href="#" class="media">
+                                        <span class="d-flex">
+                                            <img src="./img/users/1.jpg" class="rounded-circle" alt="">
+                                        </span>
+                                        <span class="media-body">
+                                            <span class="heading-font-family media-heading">Steve Smith</span>
+                                            <span class="media-content">I slowly updated projects</span>
+                                        </span>
+                                    </a>
+                                    <a href="#" class="media">
+                                        <span class="d-flex">
+                                            <i class="ik ik-calendar"></i>
+                                        </span>
+                                        <span class="media-body">
+                                            <span class="heading-font-family media-heading">To Do</span>
+                                            <span class="media-content">Meeting with Nathan on Friday 8 AM ...</span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="footer"><a href="javascript:void(0);">See all activity</a></div>
+                            </div>
+                        </div>
+                        <button type="button" class="nav-link ml-10 right-sidebar-toggle"><i
+                                class="ik ik-message-square"></i><span class="badge bg-success">3</span></button>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                    class="ik ik-plus"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right menu-grid" aria-labelledby="menuDropdown">
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Dashboard"><i class="ik ik-bar-chart-2"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Message"><i class="ik ik-mail"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Accounts"><i class="ik ik-users"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Sales"><i class="ik ik-shopping-cart"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Purchase"><i class="ik ik-briefcase"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Pages"><i class="ik ik-clipboard"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Chats"><i class="ik ik-message-square"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Contacts"><i class="ik ik-map-pin"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Blocks"><i class="ik ik-inbox"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Events"><i class="ik ik-calendar"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Notifications"><i class="ik ik-bell"></i></a>
+                                <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="More"><i class="ik ik-more-horizontal"></i></a>
+                            </div>
+                        </div>
+                        <button type="button" class="nav-link ml-10" id="apps_modal_btn" data-toggle="modal"
+                            data-target="#appsModal"><i class="ik ik-grid"></i></button>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"><img class="avatar" src="./img/user.jpg"
+                                    alt=""></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html"><i class="ik ik-user dropdown-icon"></i>
+                                    Profile</a>
+                                <a class="dropdown-item" href="#"><i class="ik ik-settings dropdown-icon"></i>
+                                    Settings</a>
+                                <a class="dropdown-item" href="#"><span class="float-right"><span
+                                            class="badge badge-primary">6</span></span><i
+                                        class="ik ik-mail dropdown-icon"></i> Inbox</a>
+                                <a class="dropdown-item" href="#"><i class="ik ik-navigation dropdown-icon"></i>
+                                    Message</a>
+                                <a class="dropdown-item" href="login.html"><i class="ik ik-power dropdown-icon"></i>
+                                    Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-wrap">
+            <div class="app-sidebar colored">
+                <div class="sidebar-header">
+
+                    <button type="button" class="nav-toggle"><i data-toggle="expanded"
+                            class="ik ik-toggle-right toggle-icon"></i></button>
+                    <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+                </div>
+
+                <div class="sidebar-content ps ps--active-y">
+                    <div class="nav-container">
+                        <nav id="main-menu-navigation" class="navigation-main">
+
+                            <div class="nav-item">
+                                <a href="home.php"><span>Dashboard</span></a>
+                            </div>
+                            <div class="nav-item">
+                                <a href="profile_info.php"><span>Account</span></a>
+                            </div>
+
+                            <div class="nav-lavel">Orders</div>
+                            <div class="nav-item">
+                                <a href="profile_order.php"><span>Order</span></a>
+                                
+                            </div>
+                          
+                            <div class="nav-item">
+                                <a href="profile_wishlist.php"><span> Wishlist</span> </a>
+                                
+                            </div>
+                            <div class="nav-item">
+
+                                <div class="submenu-content">
+                                    <a href="ui/session-timeout.html" class="menu-item">Session Timeout</a>
+                                </div>
+                            </div>
+                            <div class="nav-item">
+
+                            </div>
+                            <div class="nav-lavel">Adress</div>
+                           
+                            <div class="nav-item">
+                                <a href="profile_shipment.php"><span>Shipping Adress</span>
+                                </a>
+                            </div>
+
+
+                            <div class="nav-item">
+                                <a href="calendar.html"><span>Calendar</span></a>
+                            </div>
+
+
+                            <div class="nav-lavel">Support</div>
+
+                            <div class="nav-item">
+                                <a href="javascript:void(0)"><span>Submit
+                                        Issue</span></a>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__rail-y" style="top: 0px; height: 687px; right: 0px;">
+                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 329px;"></div>
+                    </div>
+                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__rail-y" style="top: 0px; height: 820px; right: 0px;">
+                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 481px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="container-fluid">
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3> Order Info</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="data_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div id="data_table_wrapper"
+                                                    class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div id="data_table_wrapper"
+                                                                class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <table id="data_table"
+                                                                            class="table dataTable no-footer"
+                                                                            role="grid"
+                                                                            aria-describedby="data_table_info">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th class="sorting_asc" tabindex="0"
+                                                                                        aria-controls="data_table"
+                                                                                        rowspan="1" colspan="1"
+                                                                                        aria-label="Order Date: activate to sort column descending"
+                                                                                        style="width: 38.575px;"
+                                                                                        aria-sort="ascending">
+                                                                                        Order Date
+                                                                                    </th>
+                                                                                    <th class="sorting_asc" tabindex="0"
+                                                                                        aria-controls="data_table"
+                                                                                        rowspan="1" colspan="1"
+                                                                                        aria-label="Total Price (JOD): activate to sort column descending"
+                                                                                        style="width: 38.575px;"
+                                                                                        aria-sort="ascending">
+                                                                                        Total Price (JOD)
+                                                                                    </th>
+                                                                                    <th class="sorting" tabindex="0" aria-controls="data_table"
+                                                                                        rowspan="1" colspan="1"
+                                                                                        aria-label="Order items: activate to sort column ascending"
+                                                                                        style="width: 150px;">
+                                                                                        Order items
+                                                                                    </th>
+                                                                                    <th class="sorting" tabindex="0" aria-controls="data_table"
+                                                                                        rowspan="1" colspan="1"
+                                                                                        aria-label="Order shipment: activate to sort column ascending"
+                                                                                        style="width: 150px;">
+                                                                                        Order shipment
+                                                                                    </th>
+                                                                                    <th class="nosort sorting_disabled" rowspan="1" colspan="1"
+                                                                                        aria-label="&amp;nbsp;"
+                                                                                        style="width: 95.9875px;">
+                                                                                        &nbsp;
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <?php if (is_array($orders) && count($orders) > 0) : ?>
+    <?php foreach ($orders as $row_order) : ?>
+        <tr role="row" class="odd">
+            <td class="sorting_1">
+                <?php echo $row_order['orderdate']; ?>
+            </td>
+            <td>
+                <?php echo htmlspecialchars($row_order['totalprice']); ?>
+            </td>
+            <td><a href="profile_Product.php?id=<?php echo $row_order['id']; ?>"
+                    class="btn btn-warning">
+                    Order-items</a>
+            </td>
+            <td>
+                <a href="profile_shipment.php?id=<?php echo ($row_order['shipmentid']); ?>"
+                    class="btn btn-primary">Shipment Details</a>
+            </td>
+            <td>
+                <div class="table-actions">
+                    <a href="Profile_delet_order.php?id=<?php echo $row_order['id']; ?>"><i
+                            class="ik ik-trash-2"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else : ?>
+    <tr class="text-center">
+        <td colspan="5" style="font-size: 18px;">No orders</td>
+    </tr>
+<?php endif; ?>
+
+
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+
+
+
+                            <!-- Language - Comma Decimal Place table end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <aside class="right-sidebar ps">
+                <div class="sidebar-chat" data-plugin="chat-sidebar">
+                    <div class="sidebar-chat-info">
+                        <h6>Chat List</h6>
+                        <form class="mr-t-10">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search for friends ...">
+                                <i class="ik ik-search"></i>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="chat-list">
+                        <div class="list-group row">
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Gene Newman">
+                                <figure class="user--online">
+                                    <img src="./img/users/1.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Gene Newman</span> <span
+                                        class="username">@gene_newman</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Billy Black">
+                                <figure class="user--online">
+                                    <img src="./img/users/2.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Billy Black</span> <span
+                                        class="username">@billyblack</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Herbert Diaz">
+                                <figure class="user--online">
+                                    <img src="./img/users/3.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Herbert Diaz</span> <span
+                                        class="username">@herbert</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Sylvia Harvey">
+                                <figure class="user--busy">
+                                    <img src="./img/users/4.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Sylvia Harvey</span> <span
+                                        class="username">@sylvia</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item active" data-chat-user="Marsha Hoffman">
+                                <figure class="user--busy">
+                                    <img src="./img/users/5.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Marsha Hoffman</span> <span
+                                        class="username">@m_hoffman</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Mason Grant">
+                                <figure class="user--offline">
+                                    <img src="./img/users/1.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Mason Grant</span> <span
+                                        class="username">@masongrant</span> </span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item" data-chat-user="Shelly Sullivan">
+                                <figure class="user--offline">
+                                    <img src="./img/users/2.jpg" class="rounded-circle" alt="">
+                                </figure><span><span class="name">Shelly Sullivan</span> <span
+                                        class="username">@shelly</span></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+               
+            </aside>
+
+            <div class="chat-panel" hidden="">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <a href="javascript:void(0);"><i class="ik ik-message-square text-success"></i></a>
+            <span class="user-name">John Doe</span>
+            <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="card-body">
+            <div class="widget-chat-activity flex-1">
+                <div class="messages ps">
+
+                
+                 
+                </div>
+            </div>
+        </div>
+        <form class="card-footer" method="post">
+            <div class="d-flex justify-content-end">
+                <textarea class="border-0 flex-1" rows="1" placeholder="Type your message here"></textarea>
+                <button class="btn btn-icon" type="submit"><i class="ik ik-arrow-right text-success"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./src/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+    <script src="./node_modules/screenfull/dist/screenfull.js"></script>
+    <script src="./node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="./node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="./dist/js/theme.min.js"></script>
+    <script src="./js/datatables.js"></script>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+            (function (b, o, i, l, e, r) {
+                b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+                    function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+                e = o.createElement(i); r = o.getElementsByTagName(i)[0];
+                e.src = 'https://www.google-analytics.com/analytics.js';
+                r.parentNode.insertBefore(e, r)
+            }(window, document, 'script', 'ga'));
+        ga('create', 'UA-XXXXX-X', 'auto'); ga('send', 'pageview');
+
+
+    
+    function getChatMessages() {
+        $.ajax({
+            url: 'get_chat_messages.php',
+            dataType: 'json',
+            success: function (data) {
+                var chatPanel = $('.messages');
+                chatPanel.empty(); // Clear existing messages
+                
+                data.forEach(function (message) {
+                    var messageTypeClass = (message.sender_id == <?php echo $loggedInUserId; ?>) ? 'sent' : 'received';
+                    var messageHtml = `
+                        <div class="message media ${messageTypeClass}">
+                            <figure class="user--online">
+                                <a href="#">
+                                    <img src="./img/users/${message.sender_id}.jpg" class="rounded-circle" alt="">
+                                </a>
+                            </figure>
+                            <div class="message-body media-body">
+                                <p>${message.message}</p>
+                            </div>
+                        </div>`;
+                    chatPanel.append(messageHtml);
+                });
+
+                // Scroll to the bottom of the chat panel
+                chatPanel.scrollTop(chatPanel[0].scrollHeight);
+            }
+        });
+    }
+
+    // Fetch chat messages initially and refresh every few seconds
+    getChatMessages();
+    setInterval(getChatMessages, 1000); // Update every 5 seconds
+
+//   **************************************************************************
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".form-control");
+
+        searchInput.addEventListener("input", function (event) {
+            const searchText = event.target.value;
+            // Call a function to perform the search using the searchText
+            performSearch(searchText);
+        });
+    });
+
+    function performSearch(searchText) {
+        // Here, you can implement the logic to search for friends based on the searchText
+        // This could involve making AJAX requests to a server or searching through an array of friends, etc.
+        // Update the search results dynamically based on the search text.
+        // For demonstration purposes, I'll just log the searchText to the console.
+        console.log("Searching for:", searchText);
+    }
+
+
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>
